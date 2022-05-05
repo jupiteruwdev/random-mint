@@ -507,7 +507,7 @@ const abi = [
 	}
 ];
 
-const contractAddress = "0xEFD5CC66BD5E9AE2713a9250153EBc298B98651c";
+const contractAddress = "0x195a19883d39E1cD24269BA3e9a711855bd0c471";
 
 export default function Home() {
   const [percent, setPercent] = useState(0);
