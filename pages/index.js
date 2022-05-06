@@ -15,6 +15,16 @@ const GET_MINTERS = gql`
   }
 `
 
+const GET_HISTORIES = gql`
+query getHistories {
+  histories (first: 1000) {
+    id
+    minter
+    status
+  }
+}
+`
+
 const abi = [
 	{
 		"inputs": [
@@ -513,6 +523,7 @@ export default function Home() {
   const [percent, setPercent] = useState(0);
   const [show, setShow] = useState(false);
   const [minters, setMinters] = useState([]);
+  const [history, setHistory] = useState([]);
   const [mintStatus, setMintStatus] = useState(false);
   const [buttonText, setButtonText] = useState("Mint");
   const [loading, setLoading] = useState(false);
@@ -556,7 +567,9 @@ export default function Home() {
 
   const fetchHistory = async () => {
     const { minters } = await request('https://api.thegraph.com/subgraphs/name/jupiteruwdev/random-mint', GET_MINTERS)
+    const { histories } = await request('https://api.thegraph.com/subgraphs/name/jupiteruwdev/random-mint', GET_HISTORIES);
     setMinters(minters);
+    setHistory(histories);
   }
 
   useEffect(() => {
@@ -633,7 +646,7 @@ export default function Home() {
               )}
               </div>
             </Tab>
-            <Tab eventKey="history" title="History">
+            <Tab eventKey="holders" title="Holders">
               <div style={{padding: '1rem'}}>
                 <Table striped bordered hover>
                   <thead>
@@ -649,6 +662,28 @@ export default function Home() {
                         <td>{index + 1}</td>
                         <td>{minter.id}</td>
                         <td>{minter.count}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </Tab>
+            <Tab eventKey="history" title="History">
+            <div style={{padding: '1rem'}}>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Wallet</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.map((item, index) => (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td>{item.minter}</td>
+                        <td>{item.status}</td>
                       </tr>
                     ))}
                   </tbody>
